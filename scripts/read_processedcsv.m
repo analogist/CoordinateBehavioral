@@ -9,8 +9,8 @@ for i = 1:numel(filelist)
     fclose(fileID);
     dataArray([1, 2, 3, 4, 5, 6, 7, 8, 9]) = cellfun(@(x) num2cell(x), dataArray([1, 2, 3, 4, 5, 6, 7, 8, 9]), 'UniformOutput', false);
     behaviordat = [dataArray{1:end-1}];
-    [position, controlVel, controlPol, errorin, rotation, runnum] = behavior(behaviordat, pickuplocs);
-    [errorresult(i).error, errorresult(i).errornorm, errorresult(i).rawerrors, errorresult(i).meanerror, errorresult(i).sderror] = summaryerror(errorin, rotation, runnum);
+    [position, controlVel, controlPol, errorin, rotation, runnum, target] = behavior(behaviordat, pickuplocs);
+    [errorresult(i).error, errorresult(i).errornorm, errorresult(i).rawerrors, errorresult(i).meanerror, errorresult(i).sderror, errorresult(i).numruns] = summaryerror(errorin, rotation, runnum, target);
 end
 % clearvars filename fileID dataArray ans;
 % save('T113318behav', 'T113318behav');
