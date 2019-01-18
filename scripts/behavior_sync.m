@@ -1,4 +1,4 @@
-function [ position, controlVel, controlPol, error, rotation, runnum, target ] = behavior( behaviorcells, pickuplocs, butndata, butnfs )
+function [ startidxtdt, stopidxtdt ] = behavior_sync( behaviorcells, pickuplocs, butndata, butnfs, behaviortable )
 %BEHAVIOR Summary of this function goes here
 %   Detailed explanation goes here
 %COMPUTE_BUTNALIGN Summary of this function goes here
@@ -74,11 +74,18 @@ function [ position, controlVel, controlPol, error, rotation, runnum, target ] =
         unity_correct_clock = unity_struct.clock + offset;
         tdt_clock = (0:length(butndata)-1)'/butnfs;
         
-        position = interp1(unity_correct_clock, position, tdt_clock, 'linear', 'extrap');
-        controlVel = interp1(unity_correct_clock, controlVel, tdt_clock, 'linear', 'extrap');
-        controlPol = interp1(unity_correct_clock, controlPol, tdt_clock, 'linear', 'extrap');
-        error.angle = interp1(unity_correct_clock, error.angle, tdt_clock, 'linear', 'extrap');
-        rotation = interp1(unity_correct_clock, rotation, tdt_clock, 'nearest', 'extrap');
+        starttime = unity_correct_clock(behaviortable.start);
+        stoptime = unity_correct_clock(behaviortable.stop);
+        
+        startidxtdt = zeros(size(starttime));
+        stopidxtdt = zeros(size(stoptime));
+        
+        for i = 1:length(startidxtdt)
+            startidxtdt(i) = findclosest(starttime(i), tdt_clock);
+            stopidxtdt(i) = findclosest(stoptime(i), tdt_clock);
+        end
+        
+        
     end
     
 end
